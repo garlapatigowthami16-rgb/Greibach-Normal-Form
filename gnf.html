@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GNF Notation Tool</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #f7f8fc;
+            color: #1f2937;
+            line-height: 1.6;
+        }
+
+        /* NAVBAR */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: #0f172a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 8%;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo {
+            color: #d4af37;
+            font-size: 26px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 28px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #d4af37;
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 90vh;
+            background: linear-gradient(
+                135deg,
+                #0f172a,
+                #172554
+            );
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .hero-content {
+            max-width: 850px;
+        }
+
+        .hero h1 {
+            font-size: 55px;
+            color: #d4af37;
+            margin-bottom: 20px;
+        }
+
+        .hero h2 {
+            font-size: 30px;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #dbeafe;
+            margin-bottom: 35px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 13px 25px;
+            margin: 8px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn-gold {
+            background: #d4af37;
+            color: #0f172a;
+        }
+
+        .btn-gold:hover {
+            background: #f0cc57;
+            transform: translateY(-3px);
+        }
+
+        .btn-outline {
+            border: 2px solid #d4af37;
+            color: #d4af37;
+        }
+
+        .btn-outline:hover {
+            background: #d4af37;
+            color: #0f172a;
+        }
+
+        /* GENERAL SECTION */
+        section {
+            padding: 80px 8%;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 45px;
+        }
+
+        .section-title h2 {
+            font-size: 38px;
+            color: #0f172a;
+        }
+
+        .section-title span {
+            color: #d4af37;
+        }
+
+        .section-title p {
+            margin-top: 10px;
+            color: #64748b;
+        }
+
+        /* THEORY */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 8px 25px rgba(15, 23, 42, 0.08);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 15px 30px rgba(15, 23, 42, 0.12);
+        }
+
+        .card h3 {
+            color: #172554;
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+
+        .formula {
+            background: #0f172a;
+            color: #d4af37;
+            padding: 15px;
+            text-align: center;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 19px;
+            font-weight: bold;
+        }
+
+        /* RULES */
+        .rules-container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .rule {
+            background: white;
+            margin-bottom: 15px;
+            padding: 20px;
+            border-left: 5px solid #d4af37;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+        }
+
+        .rule strong {
+            color: #172554;
+        }
+
+        /* EXAMPLES */
+        .examples {
+            background: #eef2ff;
+        }
+
+        .example-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .example-box {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(15, 23, 42, 0.08);
+        }
+
+        .example-box h3 {
+            margin-bottom: 20px;
+            font-size: 23px;
+        }
+
+        .valid-title {
+            color: #15803d;
+        }
+
+        .invalid-title {
+            color: #dc2626;
+        }
+
+        pre {
+            background: #0f172a;
+            color: #d4af37;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        .explanation {
+            margin-top: 15px;
+            color: #475569;
+        }
+
+        /* VALIDATOR */
+        .validator-section {
+            background: white;
+        }
+
+        .validator {
+            max-width: 900px;
+            margin: auto;
+            background: #f8fafc;
+            padding: 35px;
+            border-radius: 15px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 220px;
+            padding: 18px;
+            border: 2px solid #cbd5e1;
+            border-radius: 10px;
+            resize: vertical;
+            font-size: 16px;
+            outline: none;
+            font-family: Consolas, monospace;
+        }
+
+        textarea:focus {
+            border-color: #d4af37;
+        }
+
+        .button-container {
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 22px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .check-btn {
+            background: #0f172a;
+            color: white;
+        }
+
+        .check-btn:hover {
+            background: #172554;
+        }
+
+        .example-btn {
+            background: #d4af37;
+            color: #0f172a;
+        }
+
+        .example-btn:hover {
+            background: #f0cc57;
+        }
+
+        .clear-btn {
+            background: #dc2626;
+            color: white;
+        }
+
+        .clear-btn:hover {
+            background: #b91c1c;
+        }
+
+        #result {
+            margin-top: 25px;
+            padding: 18px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .success {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #86efac;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        /* TABLE */
+        .table-container {
+            margin-top: 25px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th {
+            background: #0f172a;
+            color: #d4af37;
+            padding: 14px;
+        }
+
+        td {
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        /* FOOTER */
+        footer {
+            background: #0f172a;
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        footer h3 {
+            color: #d4af37;
+            margin-bottom: 10px;
+        }
+
+        footer p {
+            color: #cbd5e1;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .example-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+            }
+        }
+
+        @media (max-width: 700px) {
+            nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+
+            .hero h1 {
+                font-size: 34px;
+            }
+
+            .hero h2 {
+                font-size: 23px;
+            }
+
+            section {
+                padding: 60px 5%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVIGATION -->
+    <nav>
+        <div class="logo">GNF Tool</div>
+
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#theory">Theory</a></li>
+            <li><a href="#rules">Rules</a></li>
+
+            <!-- EXAMPLES BEFORE VALIDATOR -->
+            <li><a href="#examples">Examples</a></li>
+            <li><a href="#validator">Validator</a></li>
+        </ul>
+    </nav>
+
+
+    <!-- HOME -->
+    <section class="hero" id="home">
+
+        <div class="hero-content">
+
+            <h1>Greibach Normal Form</h1>
+
+            <h2>GNF Notation Tool</h2>
+
+            <p>
+                Learn, understand and validate Context-Free Grammars
+                using Greibach Normal Form.
+            </p>
+
+            <a href="#examples" class="btn btn-gold">
+                View Examples
+            </a>
+
+            <a href="#validator" class="btn btn-outline">
+                Try Validator
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- THEORY -->
+    <section id="theory">
+
+        <div class="section-title">
+
+            <h2>GNF <span>Theory</span></h2>
+
+            <p>
+                Understand the basic concept of Greibach Normal Form
+            </p>
+
+        </div>
+
+        <div class="cards">
+
+            <div class="card">
+
+                <h3>What is GNF?</h3>
+
+                <p>
+                    Greibach Normal Form is a special form of
+                    Context-Free Grammar where every production
+                    starts with a terminal symbol.
+                </p>
+
+                <div class="formula">
+                    A → aα
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Components</h3>
+
+                <p>
+                    A is a non-terminal, a is a terminal and α
+                    represents zero or more non-terminals.
+                </p>
+
+                <div class="formula">
+                    A → aBC
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Main Idea</h3>
+
+                <p>
+                    The important condition is that the first symbol
+                    on the right side must always be a terminal.
+                </p>
+
+                <div class="formula">
+                    A → a
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- RULES -->
+    <section id="rules">
+
+        <div class="section-title">
+
+            <h2>GNF <span>Rules</span></h2>
+
+            <p>
+                Important rules that every GNF grammar should follow
+            </p>
+
+        </div>
+
+        <div class="rules-container">
+
+            <div class="rule">
+                <strong>Rule 1:</strong>
+                Every production must start with a terminal.
+            </div>
+
+            <div class="rule">
+                <strong>Rule 2:</strong>
+                The general form is A → aα.
+            </div>
+
+            <div class="rule">
+                <strong>Rule 3:</strong>
+                A is a single non-terminal.
+            </div>
+
+            <div class="rule">
+                <strong>Rule 4:</strong>
+                a is a terminal symbol.
+            </div>
+
+            <div class="rule">
+                <strong>Rule 5:</strong>
+                α can contain zero or more non-terminals.
+            </div>
+
+            <div class="rule">
+                <strong>Rule 6:</strong>
+                A production such as A → BC is not in GNF.
+            </div>
+
+            <div class="rule">
+                <strong>Rule 7:</strong>
+                Epsilon production S → ε can be allowed as a special
+                exception when the grammar permits it.
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- EXAMPLES FIRST -->
+    <section id="examples" class="examples">
+
+        <div class="section-title">
+
+            <h2>GNF <span>Examples</span></h2>
+
+            <p>
+                Examples of valid and invalid Greibach Normal Form productions
+            </p>
+
+        </div>
+
+
+        <div class="example-grid">
+
+            <!-- VALID EXAMPLE -->
+            <div class="example-box">
+
+                <h3 class="valid-title">
+                    ✓ Valid GNF Example
+                </h3>
+
+                <pre>
+S -> aAB
+A -> bB
+B -> c
+                </pre>
+
+                <p class="explanation">
+                    <strong>Why is it valid?</strong><br><br>
+
+                    S → aAB starts with terminal <b>a</b>.<br>
+                    A → bB starts with terminal <b>b</b>.<br>
+                    B → c starts with terminal <b>c</b>.<br><br>
+
+                    Therefore, all productions follow the
+                    GNF rule A → aα.
+                </p>
+
+            </div>
+
+
+            <!-- INVALID EXAMPLE -->
+            <div class="example-box">
+
+                <h3 class="invalid-title">
+                    ✗ Invalid GNF Example
+                </h3>
+
+                <pre>
+S -> AB
+A -> a
+B -> b
+                </pre>
+
+                <p class="explanation">
+                    <strong>Why is it invalid?</strong><br><br>
+
+                    S → AB starts with the non-terminal <b>A</b>.<br><br>
+
+                    In GNF, the first symbol on the right side
+                    must be a terminal.<br><br>
+
+                    Therefore, S → AB is not a valid GNF production.
+                </p>
+
+            </div>
+
+
+            <!-- VALID PRODUCTIONS -->
+            <div class="example-box">
+
+                <h3 class="valid-title">
+                    ✓ More Valid Productions
+                </h3>
+
+                <pre>
+A -> a
+A -> aB
+A -> aBC
+A -> bC
+A -> cABC
+                </pre>
+
+                <p class="explanation">
+                    All these productions begin with a terminal
+                    symbol such as <b>a</b>, <b>b</b>, or <b>c</b>.
+                </p>
+
+            </div>
+
+
+            <!-- INVALID PRODUCTIONS -->
+            <div class="example-box">
+
+                <h3 class="invalid-title">
+                    ✗ More Invalid Productions
+                </h3>
+
+                <pre>
+A -> BC
+A -> Ba
+A -> ABC
+A -> ε
+                </pre>
+
+                <p class="explanation">
+                    These productions are invalid because they either
+                    begin with a non-terminal or contain an epsilon
+                    production that is not being treated as the
+                    allowed start-symbol exception.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- VALIDATOR SECOND -->
+    <section id="validator" class="validator-section">
+
+        <div class="section-title">
+
+            <h2>GNF <span>Validator</span></h2>
+
+            <p>
+                Enter your grammar and check whether it follows GNF rules
+            </p>
+
+        </div>
+
+
+        <div class="validator">
+
+            <label for="grammarInput">
+                <strong>Enter Grammar:</strong>
+            </label>
+
+            <br><br>
+
+            <textarea
+                id="grammarInput"
+                placeholder="Example:
+S -> aAB
+A -> bB
+B -> c"
+            ></textarea>
+
+
+            <div class="button-container">
+
+                <button
+                    class="check-btn"
+                    onclick="checkGNF()">
+                    Check GNF
+                </button>
+
+                <button
+                    class="example-btn"
+                    onclick="loadExample()">
+                    Load Example
+                </button>
+
+                <button
+                    class="clear-btn"
+                    onclick="clearGrammar()">
+                    Clear
+                </button>
+
+            </div>
+
+
+            <div id="result"></div>
+
+            <div
+                id="tableContainer"
+                class="table-container">
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer>
+
+        <h3>GNF Notation Tool</h3>
+
+        <p>
+            A simple educational tool for learning and validating
+            Greibach Normal Form.
+        </p>
+
+        <p>
+            © 2026 GNF Tool | FLAT Project
+        </p>
+
+    </footer>
+
+
+    <!-- JAVASCRIPT -->
+    <script>
+
+        function checkGNF() {
+
+            const input =
+                document.getElementById("grammarInput").value.trim();
+
+            const result =
+                document.getElementById("result");
+
+            const tableContainer =
+                document.getElementById("tableContainer");
+
+
+            result.style.display = "block";
+            tableContainer.innerHTML = "";
+
+
+            if (input === "") {
+
+                result.className = "error";
+
+                result.innerHTML =
+                    "⚠ Please enter a grammar.";
+
+                return;
+            }
+
+
+            const lines =
+                input.split("\n");
+
+            let allValid = true;
+
+            let rows = [];
+
+
+            for (let line of lines) {
+
+                line = line.trim();
+
+
+                if (line === "") {
+                    continue;
+                }
+
+
+                let parts;
+
+
+                if (line.includes("->")) {
+
+                    parts = line.split("->");
+
+                } else if (line.includes("→")) {
+
+                    parts = line.split("→");
+
+                } else {
+
+                    allValid = false;
+
+                    rows.push({
+                        production: line,
+                        status: "Invalid",
+                        reason: "Missing -> or →"
+                    });
+
+                    continue;
+                }
+
+
+                if (parts.length !== 2) {
+
+                    allValid = false;
+
+                    rows.push({
+                        production: line,
+                        status: "Invalid",
+                        reason: "Invalid production format"
+                    });
+
+                    continue;
+                }
+
+
+                const lhs =
+                    parts[0].trim();
+
+                const rhs =
+                    parts[1].trim();
+
+
+                /* CHECK LHS */
+
+                if (!/^[A-Z]$/.test(lhs)) {
+
+                    allValid = false;
+
+                    rows.push({
+                        production: line,
+                        status: "Invalid",
+                        reason: "LHS must be a single uppercase non-terminal"
+                    });
+
+                    continue;
+                }
+
+
+                /* CHECK ALTERNATIVES */
+
+                const alternatives =
+                    rhs.split("|");
+
+
+                for (let alternative of alternatives) {
+
+                    alternative =
+                        alternative.trim();
+
+
+                    /* EPSILON */
+
+                    if (
+                        alternative === "" ||
+                        alternative === "ε" ||
+                        alternative.toLowerCase() === "epsilon"
+                    ) {
+
+                        allValid = false;
+
+                        rows.push({
+                            production: lhs + " → " + alternative,
+                            status: "Invalid",
+                            reason: "Epsilon or empty production"
+                        });
+
+                        continue;
+                    }
+
+
+                    /* FIRST SYMBOL */
+
+                    const first =
+                        alternative.charAt(0);
+
+
+                    /* TERMINAL CHECK */
+
+                    if (
+                        first >= "a" &&
+                        first <= "z"
+                    ) {
+
+                        rows.push({
+                            production: lhs + " → " + alternative,
+                            status: "Valid",
+                            reason: "Starts with terminal"
+                        });
+
+                    } else {
+
+                        allValid = false;
+
+                        rows.push({
+                            production: lhs + " → " + alternative,
+                            status: "Invalid",
+                            reason: "Must start with terminal"
+                        });
+
+                    }
+
+                }
+
+            }
+
+
+            /* FINAL RESULT */
+
+            if (allValid) {
+
+                result.className = "success";
+
+                result.innerHTML =
+                    "✓ The grammar is in Greibach Normal Form (GNF).";
+
+            } else {
+
+                result.className = "error";
+
+                result.innerHTML =
+                    "✗ The grammar is NOT in Greibach Normal Form.";
+
+            }
+
+
+            /* CREATE TABLE */
+
+            let tableHTML = `
+                <table>
+
+                    <tr>
+                        <th>Production</th>
+                        <th>Status</th>
+                        <th>Reason</th>
+                    </tr>
+            `;
+
+
+            rows.forEach(row => {
+
+                tableHTML += `
+                    <tr>
+
+                        <td>
+                            ${row.production}
+                        </td>
+
+                        <td>
+                            ${row.status}
+                        </td>
+
+                        <td>
+                            ${row.reason}
+                        </td>
+
+                    </tr>
+                `;
+
+            });
+
+
+            tableHTML += `
+                </table>
+            `;
+
+
+            tableContainer.innerHTML =
+                tableHTML;
+        }
+
+
+        /* LOAD EXAMPLE */
+
+        function loadExample() {
+
+            const example = `S -> aAB
+A -> bB
+B -> c`;
+
+            document.getElementById(
+                "grammarInput"
+            ).value = example;
+
+            checkGNF();
+        }
+
+
+        /* CLEAR */
+
+        function clearGrammar() {
+
+            document.getElementById(
+                "grammarInput"
+            ).value = "";
+
+            document.getElementById(
+                "result"
+            ).style.display = "none";
+
+            document.getElementById(
+                "tableContainer"
+            ).innerHTML = "";
+        }
+
+    </script>
+
+</body>
+</html>
